@@ -4,6 +4,7 @@ source setenv.sh
 
 # FIXME: we should configure the firewall for the new allocated ports.
 # FIXME: data are volatile. We should specify a system volume and make sure it uses a IaaS volume.
+# FIXME: if nodes are located among different IaaS, there should be a seed per provider.
 
 # Build the list of IP addresses from other nodes.
 # Seeds are only used at startup.
@@ -43,7 +44,7 @@ done
 # Host ports are those defined in the graph.
 # FIXME: Cassandra requires the same port to be used by all the nodes, so we stick with the default ones.
 #
-# Restart the container if it stopped and launch a new one otherwise.
+# Restart the container if it is stopped and launch a new one otherwise.
 docker start ${ROBOCONF_CLEAN_REVERSED_INSTANCE_PATH} || \
 docker run --name ${ROBOCONF_CLEAN_REVERSED_INSTANCE_PATH} -d \
 	-e CASSANDRA_SEEDS="$SEEDS" \
