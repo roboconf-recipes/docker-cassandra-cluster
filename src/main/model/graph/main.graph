@@ -1,0 +1,31 @@
+
+# Reusable recipe => the VM types will be described somewhere else.
+cassandraNode {
+	installer: script;
+	imports: cassandraNode.* (optional);
+
+	# We expose the ports required from the outside.
+	#
+	# We do not expose the JMX port. If monitoring is required,
+	# it will be accessed from a co-localized Docker container (e.g. monitoring daemon).
+	#
+	# BTW, the inter-node port must be the same for all the nodes.
+	# See https://issues.apache.org/jira/browse/CASSANDRA-7544
+	#
+	# Which means that even with Docker, we cannot create a local cluster.
+	# There is a woraround with Docker networks, but that would not work
+	# on a multi-machine installation. So, we cannot use random[port] and
+	# we decide to stick to a multi-machine deployment as it is what makes
+	# sense for a real deployment topology.
+	exports: interNodePort = 7000;
+	exports: interNodeSecuredPort = 7001;
+	exports: clientPort = 9042;
+	exports: ip; 
+
+	# To set a different cluster name, it would be better
+	# to sub-class this type in a new graph.
+	#
+	# Sub-types cannot coexist without rewriting recipes. :(
+	# Channels would fit better. :/
+	# exports: clusterName = "CassandraCluster";
+}
